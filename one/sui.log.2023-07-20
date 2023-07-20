@@ -486,3 +486,4 @@
 2023-07-20T03:38:59.391954Z  INFO sui::client_commands: [1;90mtype[0m: 0x31e1046ef9a9f61e979af8f7dbd35ec730168f7fb0de60d4cc00ff9c143ca033::one_counter::Counter
 2023-07-20T03:38:59.391970Z  INFO sui::client_commands: [1;90mid[0m: 0x46cff9f8b8ee50a797fd8f8644de5bc6fb5b573ec02713323956c19ac21d5cad
 2023-07-20T03:38:59.391989Z  INFO sui::client_commands: [1;90mvalue[0m: 0
+2023-07-20T04:09:59.075904Z ERROR telemetry_subscribers: panicked at 'failed printing to stdout: Input/output error (os error 5)', library/std/src/io/stdio.rs:1019:9 panic.file="library/std/src/io/stdio.rs" panic.line=1019 panic.column=9

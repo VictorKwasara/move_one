@@ -1,95 +1,75 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client';
+import React,{useState} from "react"
+import Image from 'next/image';
+import styles from './page.module.css';
+import { useWalletKit } from '@mysten/wallet-kit';
+import { TransactionBlock } from '@mysten/sui.js';
+
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+  const [value, useValue] = useState(0) ;
+  const [counter, useCounter] = useState("")
+  const { signAndExecuteTransactionBlock } = useWalletKit();
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+  const initialize = async () => {
+    const tx = new TransactionBlock();
+		tx.moveCall({
+			target: '0x31e1046ef9a9f61e979af8f7dbd35ec730168f7fb0de60d4cc00ff9c143ca033::one_counter::initialize',
+			arguments: [		
+			],
+		});
+	 let tx_result = 	await signAndExecuteTransactionBlock({ transactionBlock: tx });
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+   console.log('result', tx_result);
+   console.log('result.objectChanges', tx_result.objectChanges);
+   console.log('result', tx_result.objectChanges?.filter(obj => obj.type == "created"));
+  }
+  
+  const addOne = async () => {
+    const tx = new TransactionBlock();
+		tx.moveCall({
+			target:
+				'0x31e1046ef9a9f61e979af8f7dbd35ec730168f7fb0de60d4cc00ff9c143ca033::one_counter::add_one',
+			arguments: [],
+		});
+		let tx_result = await signAndExecuteTransactionBlock({
+			transactionBlock: tx,
+		});
+		console.log('result', tx_result);
+  }
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+    
+  const removeOne = async () => {
+     const tx = new TransactionBlock();
+			tx.moveCall({
+				target:
+					'0x31e1046ef9a9f61e979af8f7dbd35ec730168f7fb0de60d4cc00ff9c143ca033::sub_counter::add_one',
+				arguments: [
+        
+        ],
+			});
+			let tx_result = await signAndExecuteTransactionBlock({
+				transactionBlock: tx,
+			});
+			console.log('result', tx_result);
+  }
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+	return (
+		<main className={styles.main}>
+			<h1>Hello there Sui Dev</h1>
+			<br />
+			<h4>Initialize the counter</h4>
+			<button onClick={initialize}>Initialize Counter</button>
+			<br />
+			<h4>Plus one</h4>
+			<button onClick={addOne}>Initialize Counter</button>
+			<br />
+			<h4>Minus one</h4>
+			<button onClick={removeOne}>Initialize Counter</button>
+			<br />
+			<br />
+			<h4>Current Value</h4>
+			{value}
+		</main>
+	);
 }
